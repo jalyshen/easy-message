@@ -2,7 +2,7 @@ package com.jaly.messaging.eventhub;
 
 import com.azure.messaging.eventhubs.EventData;
 import com.azure.messaging.eventhubs.EventHubProducerAsyncClient;
-import com.jaly.messaging.core.common.Message;
+import com.jaly.messaging.core.message.Message;
 import com.jaly.messaging.core.producer.MessageProducer;
 
 public class EventHubMessageProducer implements MessageProducer {

@@ -3,8 +3,9 @@ package com.jaly.messaging.eventhub;
 import com.azure.messaging.eventhubs.EventData;
 import com.azure.messaging.eventhubs.EventProcessorClient;
 import com.azure.messaging.eventhubs.EventProcessorClientBuilder;
-import com.jaly.messaging.core.common.Message;
-import com.jaly.messaging.core.common.MessageImpl;
+import com.azure.messaging.eventhubs.checkpointstore.blob.BlobCheckpointStore;
+import com.jaly.messaging.core.message.Message;
+import com.jaly.messaging.core.message.internal.MessageImpl;
 import com.jaly.messaging.core.consumer.MessageConsumer;
 import com.jaly.messaging.core.consumer.MessageHandler;
 import com.jaly.messaging.core.consumer.MessageSubscription;
@@ -52,7 +53,7 @@ public class EventHubMessageConsumer implements MessageConsumer {
                     if (eventData != null) {
                         Message msg = toMessage(eventData);
                         try {
-                            handler.handle(msg);
+                            handler.accept(msg);
                             partitionEvent.updateCheckpoint();
                         } catch (Exception ex) {
                             ex.printStackTrace(); //TODO: update here

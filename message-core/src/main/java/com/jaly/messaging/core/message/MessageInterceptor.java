@@ -1,4 +1,4 @@
-package com.jaly.messaging.core.common;
+package com.jaly.messaging.core.message;
 
 public interface MessageInterceptor {
 

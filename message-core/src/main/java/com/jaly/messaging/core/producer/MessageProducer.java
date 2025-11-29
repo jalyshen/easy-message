@@ -1,6 +1,6 @@
 package com.jaly.messaging.core.producer;
 
-import com.jaly.messaging.core.common.Message;
+import com.jaly.messaging.core.message.Message;
 
 public interface MessageProducer {
 

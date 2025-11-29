@@ -1,10 +1,12 @@
-package com.jaly.messaging.core.common;
+package com.jaly.messaging.core.message.internal;
+
+import com.jaly.messaging.core.message.Message;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class MessageImpl implements Message{
+public class MessageImpl implements Message {
 
     private String payload;
     private Map<String, String> headers;

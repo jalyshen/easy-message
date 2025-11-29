@@ -1,4 +1,4 @@
-package com.jaly.messaging.core.common;
+package com.jaly.messaging.core.message;
 
 import java.util.Map;
 import java.util.Optional;

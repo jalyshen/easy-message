@@ -1,6 +1,6 @@
 package com.jaly.messaging.core.consumer;
 
-import com.jaly.messaging.core.common.Message;
+import com.jaly.messaging.core.message.Message;
 
 import java.util.function.Consumer;
 

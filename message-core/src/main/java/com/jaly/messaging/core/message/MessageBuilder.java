@@ -1,7 +1,6 @@
-package com.jaly.messaging.core.producer;
+package com.jaly.messaging.core.message;
 
-import com.jaly.messaging.core.common.Message;
-import com.jaly.messaging.core.common.MessageImpl;
+import com.jaly.messaging.core.message.internal.MessageImpl;
 
 import java.util.HashMap;
 import java.util.Map;
