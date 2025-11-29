@@ -30,20 +30,6 @@
         <spring-boot.version>3.5.5</spring-boot.version>
     </properties>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-messaging-eventhubs</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-messaging-eventhubs-checkpointstore-blob</artifactId>
-        </dependency>
-
-    </dependencies>
-
     <dependencyManagement>
         <dependencies>
             <!-- 管理azure所有的SDK包 -->
