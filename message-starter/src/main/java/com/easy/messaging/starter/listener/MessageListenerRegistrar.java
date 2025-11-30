@@ -1,5 +1,6 @@
 package com.easy.messaging.starter.listener;
 
+import com.easy.messaging.core.config.EasyMessagingProperties;
 import com.easy.messaging.core.message.Message;
 import com.easy.messaging.core.consumer.MessageConsumer;
 import com.easy.messaging.core.listener.MessageHandler;
@@ -21,9 +22,14 @@ public class MessageListenerRegistrar implements ApplicationContextAware, SmartI
 
     private ApplicationContext applicationContext;
     private final MessageConsumer messageConsumer;
+    private EasyMessagingProperties props;
 
-    public MessageListenerRegistrar(MessageConsumer consumer) {
+    public MessageListenerRegistrar(ApplicationContext applicationContext,
+                                    MessageConsumer consumer,
+                                    EasyMessagingProperties props) {
+        this.applicationContext = applicationContext;
         this.messageConsumer = consumer;
+        this.props = props;
     }
 
     @Override
