@@ -1,6 +1,6 @@
 package com.easy.messaging.starter.autoconfigure;
 
-import com.easy.messaging.autoconfig.EasyMessagingProperties;
+import com.easy.messaging.autoconfig.MessagingProperties;
 import com.easy.messaging.core.consumer.MessageConsumer;
 import com.easy.messaging.core.producer.MessageProducer;
 import com.easy.messaging.eventhub.EventHubMessageConsumer;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(EasyMessagingProperties.class)
+@EnableConfigurationProperties(MessagingProperties.class)
 @ConditionalOnProperty(prefix="easy.messaging", name="enabled", havingValue="true", matchIfMissing=true)
 public class EasyMessagingAutoConfiguration {
 
@@ -33,7 +33,7 @@ public class EasyMessagingAutoConfiguration {
     @Bean
     public MessageListenerRegistrar messageListenerRegistrar(ApplicationContext context,
                                                              MessageConsumer consumer,
-                                                             EasyMessagingProperties props) {
+                                                             MessagingProperties props) {
         return new MessageListenerRegistrar(context, consumer, props);
     }
 }

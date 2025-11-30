@@ -22,11 +22,11 @@ public class ListenerScanner implements ApplicationContextAware, InitializingBea
     private final MessageConsumer consumer;
 
     // get the destinations
-    private final EasyMessagingProperties props;
+    private final MessagingProperties props;
 
     private ApplicationContext applicationContext;
 
-    public ListenerScanner(MessageConsumer consumer, EasyMessagingProperties props) {
+    public ListenerScanner(MessageConsumer consumer, MessagingProperties props) {
         this.consumer = consumer;
         this.props = props;
     }
