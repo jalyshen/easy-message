@@ -1,4 +1,4 @@
-package com.easy.messaging.core.config;
+package com.easy.messaging.autoconfig;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

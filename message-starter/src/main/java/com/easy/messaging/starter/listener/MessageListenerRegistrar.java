@@ -1,6 +1,6 @@
 package com.easy.messaging.starter.listener;
 
-import com.easy.messaging.core.config.EasyMessagingProperties;
+import com.easy.messaging.autoconfig.EasyMessagingProperties;
 import com.easy.messaging.core.message.Message;
 import com.easy.messaging.core.consumer.MessageConsumer;
 import com.easy.messaging.core.listener.MessageHandler;

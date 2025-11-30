@@ -1,6 +1,6 @@
 package com.easy.messaging.starter.autoconfigure;
 
-import com.easy.messaging.core.config.EasyMessagingProperties;
+import com.easy.messaging.autoconfig.EasyMessagingProperties;
 import com.easy.messaging.core.consumer.MessageConsumer;
 import com.easy.messaging.core.producer.MessageProducer;
 import com.easy.messaging.eventhub.EventHubMessageConsumer;

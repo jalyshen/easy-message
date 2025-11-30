@@ -1,6 +1,5 @@
-package com.easy.messaging.core.scanning;
+package com.easy.messaging.autoconfig;
 
-import com.easy.messaging.core.config.EasyMessagingProperties;
 import com.easy.messaging.core.consumer.MessageConsumer;
 import com.easy.messaging.core.listener.MessageListener;
 import org.springframework.beans.BeansException;

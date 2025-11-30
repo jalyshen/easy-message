@@ -1,0 +1,1 @@
+org.springframework.boot.springframework.boot.autoconfigure.AutoConfiguration.imports=com.easy.messaging.autoconfig.MessageAutoConfiguration
