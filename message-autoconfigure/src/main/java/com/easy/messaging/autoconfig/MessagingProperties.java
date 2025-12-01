@@ -93,7 +93,6 @@ public class MessagingProperties {
 
     private Defaults defaults = new Defaults();
 
-    // 使用Map结构，key是业务名称
     private Map<String, EventHubInstance> instances = new LinkedHashMap<>();
 
     // Getter and Setter
@@ -113,9 +112,7 @@ public class MessagingProperties {
         this.instances = instances;
     }
 
-    /**
-     * 默认配置
-     */
+
     public static class Defaults {
         private ProducerDefaults producer = new ProducerDefaults();
         private ConsumerDefaults consumer = new ConsumerDefaults();
@@ -137,9 +134,7 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * 生产者默认配置
-     */
+
     public static class ProducerDefaults {
         private Integer maxAttempts = 10;
         private Long initialIntervalMs = 1000L;
@@ -179,9 +174,7 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * 消费者默认配置
-     */
+
     public static class ConsumerDefaults {
         private Integer maxConcurrentCalls = 16;
         private Integer prefetchCount = 50;
@@ -203,14 +196,11 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * Event Hub实例配置
-     */
+
     public static class EventHubInstance {
         private Boolean enabled = true;
         private String eventHubName;
 
-        // 拆分成独立的生产者和消费者连接器
         private ProducerConnector producerConnector;
         private ConsumerConnector consumerConnector;
 
@@ -246,9 +236,6 @@ public class MessagingProperties {
             this.consumerConnector = consumerConnector;
         }
 
-        /**
-         * 获取生产者连接字符串（用于向后兼容的API）
-         */
         public String getProducerConnectionString() {
             if (producerConnector != null && producerConnector.getConnectionString() != null) {
                 return producerConnector.getConnectionString();
@@ -256,9 +243,6 @@ public class MessagingProperties {
             return null;
         }
 
-        /**
-         * 获取消费者连接字符串（用于向后兼容的API）
-         */
         public String getConsumerConnectionString() {
             if (consumerConnector != null && consumerConnector.getConnectionString() != null) {
                 return consumerConnector.getConnectionString();
@@ -267,9 +251,6 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * 生产者连接器配置
-     */
     public static class ProducerConnector {
         private Boolean enabled = true;
         private String connectionString;
@@ -300,9 +281,7 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * 消费者连接器配置
-     */
+
     public static class ConsumerConnector {
         private Boolean enabled = true;
         private String connectionString;
@@ -342,9 +321,7 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * 重试配置
-     */
+
     public static class RetryConfig {
         private Integer maxAttempts;
         private Long initialIntervalMs;
@@ -384,9 +361,7 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * 并发配置
-     */
+
     public static class ConcurrencyConfig {
         private Integer maxConcurrentCalls;
         private Integer prefetchCount;
@@ -408,9 +383,7 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * 生产者信息包装类
-     */
+
     public static class ProducerInfo {
         private String businessName;
         private String connectionString;
@@ -450,9 +423,7 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * 消费者信息包装类
-     */
+
     public static class ConsumerInfo {
         private String businessName;
         private String connectionString;
@@ -501,11 +472,7 @@ public class MessagingProperties {
         }
     }
 
-    /**
-     * 获取所有启用的生产者配置信息
-     *
-     * @return Map<业务名称, 生产者信息>
-     */
+
     public Map<String, ProducerInfo> getEnabledProducers() {
         Map<String, ProducerInfo> producers = new LinkedHashMap<>();
 
