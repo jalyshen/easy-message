@@ -92,8 +92,17 @@ public class MessagingProperties {
     private static final Logger logger = LoggerFactory.getLogger(MessagingProperties.class);
 
     private Defaults defaults = new Defaults();
-
     private Map<String, EventHubInstance> instances = new LinkedHashMap<>();
+
+    // Azure Blob Storage for Checkpoint (Event Hub Consumer 必须)
+    private String checkpointConnectionString;
+    private String checkpointContainerName;
+
+    // Getters Setters for checkpoint config
+    public String getCheckpointConnectionString() { return checkpointConnectionString; }
+    public void setCheckpointConnectionString(String checkpointConnectionString) { this.checkpointConnectionString = checkpointConnectionString; }
+    public String getCheckpointContainerName() { return checkpointContainerName; }
+    public void setCheckpointContainerName(String checkpointContainerName) { this.checkpointContainerName = checkpointContainerName; }
 
     // Getter and Setter
     public Defaults getDefaults() {
@@ -112,10 +121,25 @@ public class MessagingProperties {
         this.instances = instances;
     }
 
+    /**
+     * 将逻辑 Destination (如 "CreateOrder") 解析为物理 Topic 名 (如 "orders")。
+     * 查找顺序:
+     * 1. defaults.destinations map
+     * 2. 如果没找到，返回原名
+     */
+    public String resolveDestination(String logicalName) {
+        if (this.defaults != null && this.defaults.getDestinations() != null) {
+            return this.defaults.getDestinations().getOrDefault(logicalName, logicalName);
+        }
+        return logicalName;
+    }
+
 
     public static class Defaults {
         private ProducerDefaults producer = new ProducerDefaults();
         private ConsumerDefaults consumer = new ConsumerDefaults();
+
+        private Map<String, String> destinations = new LinkedHashMap<>();
 
         public ProducerDefaults getProducer() {
             return producer;
@@ -132,8 +156,15 @@ public class MessagingProperties {
         public void setConsumer(ConsumerDefaults consumer) {
             this.consumer = consumer;
         }
-    }
 
+        public Map<String, String> getDestinations() {
+            return destinations;
+        }
+
+        public void setDestinations(Map<String, String> destinations) {
+            this.destinations = destinations;
+        }
+    }
 
     public static class ProducerDefaults {
         private Integer maxAttempts = 10;
@@ -630,6 +661,19 @@ public class MessagingProperties {
 
         return true;
     }
+
+
+    // 辅助方法：根据 EventHubName 查找配置
+    // 这对于 Consumer 初始化很有用，因为 @MessageListener(destination="xxx") 需要反向查找是哪个 EventHubInstance
+    public ConsumerInfo findConsumerInfoByTopic(String topic) {
+        for (ConsumerInfo info : getEnabledConsumers().values()) {
+            if (info.getEventHubName().equalsIgnoreCase(topic)) {
+                return info;
+            }
+        }
+        return null;
+    }
+
 
     // for testing
     public void printSummary() {

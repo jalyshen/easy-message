@@ -13,11 +13,11 @@ public class MessageBuilder {
     protected MessageBuilder() {
     }
 
-    public MessageBuilder(String body) {
+    private MessageBuilder(String body) {
         this.body = body;
     }
 
-    public MessageBuilder(Message message) {
+    private MessageBuilder(Message message) {
         this(message.getPayload());
         this.headers = message.getHeaders();
     }
