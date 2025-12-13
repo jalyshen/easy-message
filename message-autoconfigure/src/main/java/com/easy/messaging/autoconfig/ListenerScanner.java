@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
  */
 public class ListenerScanner implements ApplicationContextAware, InitializingBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(ListenerScanner.class);;
+    private static final Logger logger = LoggerFactory.getLogger(ListenerScanner.class);
 
     private final EventHubListenerContainer container;
 

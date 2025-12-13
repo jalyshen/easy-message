@@ -99,10 +99,21 @@ public class MessagingProperties {
     private String checkpointContainerName;
 
     // Getters Setters for checkpoint config
-    public String getCheckpointConnectionString() { return checkpointConnectionString; }
-    public void setCheckpointConnectionString(String checkpointConnectionString) { this.checkpointConnectionString = checkpointConnectionString; }
-    public String getCheckpointContainerName() { return checkpointContainerName; }
-    public void setCheckpointContainerName(String checkpointContainerName) { this.checkpointContainerName = checkpointContainerName; }
+    public String getCheckpointConnectionString() {
+        return checkpointConnectionString;
+    }
+
+    public void setCheckpointConnectionString(String checkpointConnectionString) {
+        this.checkpointConnectionString = checkpointConnectionString;
+    }
+
+    public String getCheckpointContainerName() {
+        return checkpointContainerName;
+    }
+
+    public void setCheckpointContainerName(String checkpointContainerName) {
+        this.checkpointContainerName = checkpointContainerName;
+    }
 
     // Getter and Setter
     public Defaults getDefaults() {
@@ -663,8 +674,12 @@ public class MessagingProperties {
     }
 
 
-    // 辅助方法：根据 EventHubName 查找配置
-    // 这对于 Consumer 初始化很有用，因为 @MessageListener(destination="xxx") 需要反向查找是哪个 EventHubInstance
+    /**
+     * 辅助方法：根据 EventHubName 查找配置
+     * 这对于 Consumer 初始化很有用，因为 @MessageListener(destination="xxx") 需要反向查找是哪个 EventHubInstance
+     * @param topic
+     * @return
+     */
     public ConsumerInfo findConsumerInfoByTopic(String topic) {
         for (ConsumerInfo info : getEnabledConsumers().values()) {
             if (info.getEventHubName().equalsIgnoreCase(topic)) {
