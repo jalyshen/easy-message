@@ -3,7 +3,6 @@ package com.easy.messaging.autoconfig;
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
 import com.azure.messaging.eventhubs.EventHubProducerClient;
 import com.azure.messaging.eventhubs.checkpointstore.blob.BlobCheckpointStore;
-import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
 import com.easy.messaging.core.message.MessageInterceptor;
 import com.easy.messaging.core.producer.MessageProducer;
