@@ -8,19 +8,34 @@ import java.lang.annotation.*;
 public @interface MessageListener {
 
     /**
-     * 逻辑上的 destination 名称。
-     * 由 MessagingProperties 做 destination -> 真正 topic/hub 映射。
+     * Business destination name
+     * Here is the properties sample:
+     * <p>
+     * defaults:
+     *     destinations:
+     *       test-logic-name: "test-hub"
+     *  the "test-logic-name" is the "destination"
+     * </p>
+     *
+     * And here the sample of usage:
+     * <p>
+     *  @MessageListener(destination = "test-logic-name", subscriberId = "demo-sub-1")
+     *  public void handleMessage(Message message) {
+     *     //Here is your codes
+     *  }
+     *  </p>
      */
     String destination();
 
     /**
-     * 是否需要自动 ack（不同 MQ 实现可以选择忽略）。
+     * auto ack (Could ignore it based on your concrete MQ broker）
      */
     boolean autoAck() default true;
 
     /**
-     * 订阅者 Id，为了做到多实例隔离（不同 consumer group / eventhub consumer group）。
-     * 如果为空，可以由 scanner 自动生成。
+     * the subscriber Id.
+     * To achieve isolation across multiple instances by using different consumer groups / Event Hub consumer groups.
+     * scanner will generate one if not set value
      */
     String subscriberId() default "";
 }
