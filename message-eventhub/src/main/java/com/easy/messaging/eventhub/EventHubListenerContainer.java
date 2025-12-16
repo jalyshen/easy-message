@@ -23,29 +23,40 @@ public class EventHubListenerContainer implements SmartLifecycle {
 
     private static final Logger log = LoggerFactory.getLogger(EventHubListenerContainer.class);
     private boolean isRunning = false;
-    // 存储已经构建好的 Client
+
     private final List<EventProcessorClient> processors = new ArrayList<>();
-    // 拦截器
+
     private final List<MessageInterceptor> interceptors = new ArrayList<>();
-    // 依赖 BlobCheckpointStore (必须由 AutoConfig 注入)
-    private final BlobCheckpointStore checkpointStore;
+
+    // dependence BlobCheckpointStore (must be injected from  AutoConfig)
+     private final BlobCheckpointStore checkpointStore;
+
     public EventHubListenerContainer(BlobCheckpointStore checkpointStore) {
         this.checkpointStore = checkpointStore;
     }
+
     public void addInterceptor(MessageInterceptor interceptor) {
         this.interceptors.add(interceptor);
     }
     public void addInterceptors(List<MessageInterceptor> interceptors) {
         this.interceptors.addAll(interceptors);
     }
+
     /**
-     注册监听器定义，并在内部构建 Client。
-     这个方法应该在 Spring 启动早期（SmartLifecycle start 之前）被 ListenerScanner 调用。
+     * create Client instance
      */
     public void registerListener(String connectionString,
                                  String eventHubName,
                                  String consumerGroup,
                                  MessageHandler handler) {
+
+        if (this.checkpointStore == null) {
+            log.error("CheckpointStore is NULL. Could NOT register listener");
+            log.error("Please check: 1. MessagingProperties should include 'CheckpointStoreConfig'");
+            log.error("              2. application.yml should include message.checkpoint-store.account-name ");
+            return;
+        }
+
         log.info("Registering listener for EventHub: {} Group: {}", eventHubName, consumerGroup);
         EventProcessorClient client = new EventProcessorClientBuilder()
                 .connectionString(connectionString, eventHubName)
@@ -53,8 +64,8 @@ public class EventHubListenerContainer implements SmartLifecycle {
                 .checkpointStore(checkpointStore)
                 .processEvent(eventContext -> processEvent(eventContext, handler, consumerGroup))
                 .processError(this::processError)
-                // 默认从最新开始消费，防止重启时消费历史旧消息（除非有 checkpoint）
-                .initialPartitionEventPosition(map -> EventPosition.latest())
+                // default, system consumers messages from the earliest
+                .initialPartitionEventPosition(map -> EventPosition.earliest()) //EventPosition.latest())
                 .buildEventProcessorClient();
         processors.add(client);
     }
@@ -71,10 +82,10 @@ public class EventHubListenerContainer implements SmartLifecycle {
             // 2. Interceptor PreHandle
             interceptors.forEach(i -> safeExecute(() -> i.preHandle(subscriberId, message)));
 
-            // 3. 业务处理
+            // 3.
             handler.accept(message);
 
-            // 4. Checkpoint (简化版：每条都提交。生产环境建议通过计数器每N条提交一次)
+            // 4. Checkpoint
             eventContext.updateCheckpoint();
 
             // 5. Interceptor PostHandle (Success)
@@ -84,7 +95,6 @@ public class EventHubListenerContainer implements SmartLifecycle {
             log.error("Error processing message", e);
             // 5. Interceptor PostHandle (Error)
             interceptors.forEach(i -> safeExecute(() -> i.postHandle(subscriberId, message, e)));
-            // 这里不抛出异常，否则 Event Processor Client 可能会停止处理分区
         } finally {
             // 6. Interceptor PostReceive
             interceptors.forEach(i -> safeExecute(() -> i.postReceive(message)));

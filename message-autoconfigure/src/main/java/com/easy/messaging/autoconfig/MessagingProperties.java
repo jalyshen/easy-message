@@ -95,10 +95,20 @@ public class MessagingProperties {
     private Map<String, EventHubInstance> instances = new LinkedHashMap<>();
 
     // Azure Blob Storage for Checkpoint (Event Hub Consumer 必须)
-    private String checkpointConnectionString;
-    private String checkpointContainerName;
+    private CheckpointStoreConfig checkpointStore;
 
+    public CheckpointStoreConfig getCheckpointStore() {
+        return checkpointStore;
+    }
+
+    public void setCheckpointStore(CheckpointStoreConfig checkpointStore) {
+        this.checkpointStore = checkpointStore;
+    }
+
+    //    private String checkpointConnectionString;
+    //    private String checkpointContainerName;
     // Getters Setters for checkpoint config
+    /*
     public String getCheckpointConnectionString() {
         return checkpointConnectionString;
     }
@@ -114,6 +124,7 @@ public class MessagingProperties {
     public void setCheckpointContainerName(String checkpointContainerName) {
         this.checkpointContainerName = checkpointContainerName;
     }
+     */
 
     // Getter and Setter
     public Defaults getDefaults() {
@@ -143,6 +154,30 @@ public class MessagingProperties {
             return this.defaults.getDestinations().getOrDefault(logicalName, logicalName);
         }
         return logicalName;
+    }
+
+    /**
+     * 定义 CheckpointStore 的配置结构
+     * 对应 YAML:
+     * message:
+     *   checkpoint-store:
+     *     account-name: ...
+     *     account-key: ...
+     *     container-name: ...
+     */
+    public static class CheckpointStoreConfig {
+        private String accountName;
+        private String accountKey;
+        private String containerName;
+
+        public String getAccountName() { return accountName; }
+        public void setAccountName(String accountName) { this.accountName = accountName; }
+
+        public String getAccountKey() { return accountKey; }
+        public void setAccountKey(String accountKey) { this.accountKey = accountKey; }
+
+        public String getContainerName() { return containerName; }
+        public void setContainerName(String containerName) { this.containerName = containerName; }
     }
 
 
