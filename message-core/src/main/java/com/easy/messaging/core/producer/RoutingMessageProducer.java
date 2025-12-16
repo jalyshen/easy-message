@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 路由生产者：根据Destination决定使用哪个底层Client发送
- * 同时负责执行拦截器链
+ * Producer of MessageProducer: pick up the MessageProducer based on Destination
+ * And at the sometime, merge MessageInterceptors
  */
 public class RoutingMessageProducer implements MessageProducer {
 
@@ -33,16 +33,12 @@ public class RoutingMessageProducer implements MessageProducer {
 
     @Override
     public void send(String destination, Message message) {
-        // 1. 路由逻辑：这里简单假设 key 就是 resolved destination
-        // 如果需要 logical -> physical 映射，应在调用此方法前完成，或注入 Properties 解析
         MessageProducer delegate = delegates.get(destination);
 
         if (delegate == null) {
-            // 尝试查找 default 或者报错
             throw new RuntimeException("No message producer configured for destination: " + destination);
         }
 
-        // 2. 拦截器 PreSend
         for (MessageInterceptor interceptor : interceptors) {
             try {
                 interceptor.preSend(message);
@@ -52,10 +48,7 @@ public class RoutingMessageProducer implements MessageProducer {
         }
 
         try {
-            // 3. 执行发送
             delegate.send(destination, message);
-
-            // 4. 拦截器 PostSend (Success)
             for (MessageInterceptor interceptor : interceptors) {
                 try {
                     interceptor.postSend(message, null);
@@ -64,7 +57,6 @@ public class RoutingMessageProducer implements MessageProducer {
                 }
             }
         } catch (Exception e) {
-            // 4. 拦截器 PostSend (Error)
             for (MessageInterceptor interceptor : interceptors) {
                 try {
                     interceptor.postSend(message, e);

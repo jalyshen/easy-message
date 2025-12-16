@@ -14,13 +14,13 @@ import org.springframework.context.annotation.Configuration;
 public class TracingConfiguration {
 
     @Bean
-    @ConditionalOnProperty(prefix = "easy-messaging", name = "tracing-enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "messaging", name = "tracing-enabled", havingValue = "true", matchIfMissing = true)
     public MessageInterceptor traceInterceptor() {
         return new MessageInterceptor() {
             @Override
             public void preSend(com.easy.messaging.core.message.Message message) {
-                // 如果当前上下文有 Trace，注入进去；否则新建
-                // 这里简单演示新建
+                // If there is an exists TraceContext, here should inject exists traceContext instance,
+                // others, create a new one
                 TraceContext ctx = TraceContext.create();
                 TraceUtils.inject(message, ctx);
             }
@@ -28,7 +28,7 @@ public class TracingConfiguration {
             @Override
             public void preReceive(com.easy.messaging.core.message.Message message) {
                 TraceContext ctx = TraceUtils.extractOrCreate(message);
-                // 实际上这里应该把 ctx 放入 MDC 或者 ThreadLocal
+                // Here, should put ctx into MDC or ThreadLocal
             }
         };
     }
